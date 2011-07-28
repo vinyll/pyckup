@@ -1,14 +1,24 @@
 #!/usr/bin/env python
 
-import os, sys
+import os, sys, imp
 sys.path.append(os.path.dirname(__file__)+'/..')
 
 
-def main():
-    from src import manager
-    from src.model import Snapshot, SnapshotManager
+import argparse, logging
+from src.model import Snapshot
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='This is a PyMOTW sample program')
+    parser.add_argument('--config-file', dest="config_file", type=file)
+    return parser.parse_args()
     
-    conf = manager.get_config(os.path.dirname(__file__)+'/../conf.py')
+
+def main(args):
+    conf = imp.load_source('conf', args.config_file.name)
+    logging.basicConfig(filename=conf.log_file, level=conf.log_level)
+    conf.backup_root = os.path.realpath(os.path.expanduser(conf.backup_root))
+    
     backup_path = "%s/%s" % (conf.backup_root, conf.backup_name)
     
     s = Snapshot(backup_path)
@@ -17,6 +27,5 @@ def main():
     
 
 
-
 if __name__ == '__main__':
-    main()
+    main(parse_args())

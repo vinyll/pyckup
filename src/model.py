@@ -1,5 +1,5 @@
 import os, tarfile
-from exception import ConfigException
+import logging
 
 class Snapshot(object):
     
@@ -12,7 +12,7 @@ class Snapshot(object):
         """
         self.filepath = os.path.realpath(os.path.expanduser(filepath))
     
-    def __unicode__(self):
+    def __repr__(self):
         return self.filepath
     
     def add(self, paths):
@@ -35,10 +35,11 @@ class Snapshot(object):
         dir = os.path.dirname(self.filepath)
         if not os.path.isdir(dir):
             os.makedirs(dir)
-        out =  tarfile.TarFile.open(self.filepath, 'w:'+self.compression)
+        out = tarfile.TarFile.open(self.filepath, 'w:'+self.compression)
         for file in self.files:
             out.add(file, arcname=os.path.basename(file))
         out.close()
+        logging.info('Built snapshot "%s"' % self)
     
     def is_snapshot(self):
         return tarfile.is_tarfile(self.path)
