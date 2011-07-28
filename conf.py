@@ -1,16 +1,10 @@
-
 ## SPECIFIC CONF ##
 
-import os
+# Tuple of files and dirs to save
+sources = ()
 
 # Path to folder holding snapshots
-backup_root = "~/backup/mytest"
-
-# Tuple of files and dirs to save
-sources = (
-    os.path.dirname(__file__),
-    '~/worktimer/datas',
-)
+backup_root = "~"
 
 
 
@@ -31,4 +25,4 @@ import logging
 log_file = ""
 
 # Minimal level to store log. see logging module warn levels
-log_level = logging.WARNING
+log_level = logging.INFO

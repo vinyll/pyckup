@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 
-import os, sys, imp
-sys.path.append(os.path.dirname(__file__)+'/..')
+import os, sys
+sys.path.extend([
+     os.path.realpath(os.path.dirname(__file__)+'/../packages'),
+     os.path.realpath(os.path.dirname(__file__)+'/..')
+])
 
 
-import argparse, logging
+
+import argparse, logging, imp
 from src.model import Snapshot
 
 
