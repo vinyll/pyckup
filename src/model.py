@@ -3,12 +3,12 @@ import logging
 
 class Snapshot(object):
     
-    files = ()
+    files = []
     compression = 'bz2' # empty, 'gz' or 'bz2'
     
     def __init__(self, filepath):
         """
-        filepath is the snapshot file path
+        filepath is the snapshot filepath path
         """
         self.filepath = os.path.realpath(os.path.expanduser(filepath))
     
@@ -17,15 +17,20 @@ class Snapshot(object):
     
     def add(self, paths):
         """
-        Add a file or folder to the backup
+        Add a filepath or folder to the backup
         path is a string or tuple represeting the full path of the file/folder
         """
         if isinstance(paths, str):
-            paths = (paths,)
+            paths = [paths]
         
         for p in paths:
-            self.files += (os.path.realpath(os.path.expanduser(p)),)
+            p = os.path.realpath(os.path.expanduser(p))
+            if not os.path.exists(p):
+                logging.warning('Path "%s" cannot be added to %s', p, self)
+            else:
+                self.files.append(p)
         
+        logging.debug('added following files/dirs to %s : %s' % (self, ', '.join(self.files)))
     
     @property
     def path(self):
@@ -36,16 +41,19 @@ class Snapshot(object):
         if not os.path.isdir(dir):
             os.makedirs(dir)
         out = tarfile.TarFile.open(self.filepath, 'w:'+self.compression)
+
         for file in self.files:
             out.add(file, arcname=os.path.basename(file))
         out.close()
-        logging.info('Built snapshot "%s"' % self)
+        
+        logging.debug('saved %s' % self)
     
     def is_snapshot(self):
         return tarfile.is_tarfile(self.path)
     
     def delete(self):
         os.remove(self.filepath)
+        logging.debug('deleted %s' % self)
     
 
 class SnapshotManager(object):

@@ -5,26 +5,28 @@ import unittest
 from datetime import date
 from src.model import Snapshot
 
+
 today = date.strftime(date.today(), '%Y%m%d')
 
 class TestSnapshot(unittest.TestCase):
 
     def setUp(self):
-        self.path = os.path.abspath(os.path.dirname(__file__)+'/../testfiles')
-        self.snapshot = Snapshot(self.path+'/'+today+'.tar.bz2')
+        self.root_path = os.path.abspath(os.path.dirname(__file__)+'/..')
+        self.target_path = self.root_path+'/testfiles'
+        self.snapshot = Snapshot(self.target_path+'/'+today+'.tar.bz2')
 
-    def test_creates_tarball(self):
-        self.snapshot.add(self.path+'/..')
+    def test0_save(self):
+        self.snapshot.add(self.root_path+'/config.example.py')
         self.snapshot.save()
-        self.assertTrue(os.path.isfile(self.path+'/'+today+'.tar.bz2'))
+        self.assertTrue(os.path.isfile(self.target_path+'/'+today+'.tar.bz2'))
         
-    def test_delete(self):
+    def test1_delete(self):
         self.snapshot.delete()
-        self.assertFalse(os.path.isfile(self.path+'/'+today+'.tar.bz2'))
+        self.assertFalse(os.path.exists(self.target_path+'/'+today+'.tar.bz2'))
         
     def tearDown(self):
         try:
-            os.rmdir(self.path)
+            os.rmdir(self.target_path)
         except OSError:
             pass
         

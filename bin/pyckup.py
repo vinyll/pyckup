@@ -21,6 +21,8 @@ def parse_args():
 def main(args):
     conf = imp.load_source('conf', args.config_file.name)
     logging.basicConfig(filename=conf.log_file, level=conf.log_level)
+    logging.debug('** new Pyckup call **')
+    logging.debug('Loading config from file %s' % args.config_file.name)
     conf.backup_root = os.path.realpath(os.path.expanduser(conf.backup_root))
     
     backup_path = "%s/%s" % (conf.backup_root, conf.backup_name)

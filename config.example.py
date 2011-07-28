@@ -22,7 +22,10 @@ backup_name = '%s.tar.bz2' % date.strftime(date.today(), '%Y%m%d')
 import logging
 
 # File to store log
-log_file = ""
+log_file = ''
 
 # Minimal level to store log. see logging module warn levels
-log_level = logging.INFO
+log_level = 1
+
+# String format for logging rows
+logging.BASIC_FORMAT = "%(levelname)s - Pyckup/%(name)s : %(message)s"
