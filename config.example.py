@@ -15,7 +15,9 @@ from datetime import date
 # file name of the snapshot. Relative to backup_root
 backup_name = '%s.tar.bz2' % date.strftime(date.today(), '%Y%m%d')
 
-
+# list of days to preserve copies from today
+# @todo: use this to clean files
+backup_days = [1, 2, 3, 7, 30]
 
 ## LOGGING ##
 

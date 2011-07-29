@@ -13,7 +13,7 @@ from src.model import Snapshot
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='This is a PyMOTW sample program')
+    parser = argparse.ArgumentParser(description='Backup your files easily')
     parser.add_argument('--config-file', dest="config_file", type=file)
     return parser.parse_args()
     
